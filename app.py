@@ -14,14 +14,14 @@ collection = db.mars_data_entries
 @app.route("/")
 def home():
     mars_data = list(db.collection.find())[0]
-    return render_remplate('index.html',mars_data = mars_data)
+    return render_template('index.html', mars_data = mars_data)
 
 
 @app.route("/scrape")
 def web_scrape():
     db.collection.remove({})
     mars_data = scrape.scrape()
-    return render_template(scrape.html)
+    return render_template('scrape.html')
 
 if __name__ == "__main__":
     app.run(debug =True)
