@@ -57,37 +57,24 @@ def scrape ():
     time.sleep(1)
     mars_weather_html = browser.html
     mars_weather_soup = BeautifulSoup(mars_weather_html,'html.parser')
-    latest_tweet = mars_weather_soup.find('div', class_='tweet')
+
+#    latest_tweet = mars_weather_soup.find('div', class_='tweet')
+    latest_tweet = mars_weather_soup.find('ol', class_='stream-items')
     latest_tweet_text = latest_tweet.find('p',class_ = "tweet-text").text
-    mars_data["weather_summary"] = latest_tweet
-
-
-
-# visit the mars weather report twitter and scrape the latest tweet
-    mars_weather_url = 'https://twitter.com/marswxreport?lang=en'
-    browser.visit(mars_weather_url)
-    time.sleep(1)
-    mars_weather_html = browser.html
-    mars_weather_soup = BeautifulSoup(mars_weather_html, 'html.parser')
-
-    tweets = mars_weather_soup.find('ol', class_='stream-items')
-    mars_weather = tweets.find('p', class_="tweet-text").text
-    mars_data["weather_summary"] = mars_weather
-
-
+    mars_data["weather_summary"] = latest_tweet_text
 
 # Visit space facts and scrape the Mars fact table
     mars_facts_url = 'https://space-facts.com/mars/'
     browser.visit(mars_facts_url)
     time.sleep(1)
-    
+
     mars_facts_html = browser.html
     mars_facts_soup = BeautifulSoup(mars_facts_html,'html.parser')
     facts_table = mars_facts_soup.find('table', class_ ='tablepress tablepress-id-mars')
-    
+
     column1 = facts_table.find_all('td', class_ = 'column-1')
     column2 = facts_table.find_all('td', class_ ='column-2')
-    
+
     facets = []
     values = []
 
@@ -101,7 +88,7 @@ def scrape ():
 
         # Creating df
     mars_facts = pd.Dataframe({"Parameters":facets, "Value":values})
-    mars_facts_html = mars_facts.to_html(header = False, index = False)  
+    mars_facts_html = mars_facts.to_html(header = False, index = False)
     mars_data["fact_table"] = mars_facts_html
 
     # Visiting and scraping hemsiphere images of Mars from USGS site
@@ -133,11 +120,8 @@ def scrape ():
         hemi_dict['img_url'] = hemi_img_path
         hemi_dicts.append(hem_dict)
 
-    mars_data['hemisphere_images'] = hemi_dicts
-    
+    mars_data["hemisphere_images"] = hemi_dicts
+
     browser.quit()
 
     return mars_data
-
-
-

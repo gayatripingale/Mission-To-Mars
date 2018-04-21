@@ -6,7 +6,7 @@ import scrape
 # create instance of Flask app
 app = Flask(__name__)
 
-# create mongo connection 
+# create mongo connection
 client = pymongo.MongoClient()
 db = client.mars_db
 collection = db.mars_data_entries
@@ -25,7 +25,3 @@ def web_scrape():
 
 if __name__ == "__main__":
     app.run(debug =True)
-
-
-
-
